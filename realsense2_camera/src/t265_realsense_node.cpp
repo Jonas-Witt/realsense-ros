@@ -100,8 +100,7 @@ void T265RealsenseNode::calcAndPublishStaticTransform(const stream_index_pair& s
     float3 trans{ex.translation[0], ex.translation[1], ex.translation[2]};
     if (stream == POSE)
     {
-        Q = Q.inverse();
-        publish_static_tf(transform_ts_, trans, Q, _frame_id[stream], _base_frame_id);
+        publish_static_tf(transform_ts_, trans, Q, _base_frame_id, _frame_id[stream]);
     }
     else
     {

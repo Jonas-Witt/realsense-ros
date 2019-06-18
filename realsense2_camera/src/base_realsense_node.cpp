@@ -1284,15 +1284,11 @@ void BaseRealSenseNode::pose_callback(rs2::frame frame)
     static tf2_ros::TransformBroadcaster br;
     geometry_msgs::TransformStamped msg;
     msg.header.stamp = t;
-    msg.header.frame_id = _odom_frame_id;
-    msg.child_frame_id = _frame_id[POSE];
-    msg.transform.translation.x = pose_msg.pose.position.x;
-    msg.transform.translation.y = pose_msg.pose.position.y;
-    msg.transform.translation.z = pose_msg.pose.position.z;
-    msg.transform.rotation.x = pose_msg.pose.orientation.x;
-    msg.transform.rotation.y = pose_msg.pose.orientation.y;
-    msg.transform.rotation.z = pose_msg.pose.orientation.z;
-    msg.transform.rotation.w = pose_msg.pose.orientation.w;
+    msg.header.frame_id = _frame_id[POSE];
+    msg.child_frame_id = _odom_frame_id;
+    tf::Pose pose_tf;
+    tf::poseMsgToTF(pose_msg.pose, pose_tf);
+    tf::transformTFToMsg(pose_tf.inverse(), msg.transform);
 
     if (_publish_odom_tf) br.sendTransform(msg);
 
