@@ -149,8 +149,6 @@ void RealSenseNodeFactory::onInit()
 				pipe->start(cfg); //File will be opened in read mode at this point
 				_device = pipe->get_active_profile().get_device();
 				_realSenseNode = std::unique_ptr<BaseRealSenseNode>(new BaseRealSenseNode(nh, privateNh, _device, _serial_no));
-				_realSenseNode->publishTopics();
-				_realSenseNode->registerDynamicReconfigCb(nh);
 			}
 			if (_device)
 			{
@@ -204,6 +202,7 @@ void RealSenseNodeFactory::StartDevice()
 	switch(pid)
 	{
 	case SR300_PID:
+	case SR300v2_PID:
 	case RS400_PID:
 	case RS405_PID:
 	case RS410_PID:
@@ -229,7 +228,6 @@ void RealSenseNodeFactory::StartDevice()
 	}
 	assert(_realSenseNode);
 	_realSenseNode->publishTopics();
-	_realSenseNode->registerDynamicReconfigCb(nh);
 }
 
 void RealSenseNodeFactory::tryGetLogSeverity(rs2_log_severity& severity) const
